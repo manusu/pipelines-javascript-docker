@@ -1,32 +1,47 @@
-# Docker
-# Build a Docker image
-# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
-
 trigger:
-- main
-
-resources:
-- repo: self
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - Dockerfile
 
 variables:
-  tag: '$(Build.BuildId)'
+  # 修改为自己的镜像名称和标签
+  imageName: myimage
+  imageTag: latest
 
 stages:
-- stage: Build
-  displayName: Build image
-  jobs:
-  - job: Build
-    displayName: Build
-    pool:
-      vmImage: ubuntu-latest
-    steps:
-    - task: Docker@2
-      displayName: Build an image
-      inputs:
-        command: buildAndPush
-        repository: $(imageRepository)
-        dockerfile: '$(Build.SourcesDirectory)/app/Dockerfile'
-        containerRegistry: $(dockerRegistryServiceConnection)
-        tags: |
-          $(tag)
-        
+  - stage: build
+    displayName: Build Docker image
+    jobs:
+      - job: build
+        displayName: Build
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          # 构建 Docker 镜像
+          - task: Docker@2
+            displayName: Build Docker image
+            inputs:
+              containerRegistry: dockerhub
+              repository: $dockerhub
+              command: 'build'
+              Dockerfile: '$(Build.SourcesDirectory)/app/Dockerfile'
+              tags: |
+                $(imageTag)
+          # 登录到 Docker Hub
+          - task: Docker@2
+            displayName: Login to Docker Hub
+            inputs:
+              containerRegistry: $dockerhub
+              command: 'login'
+          # 推送 Docker 镜像到 Docker Hub
+          - task: Docker@2
+            displayName: Push Docker image to Docker Hub
+            inputs:
+              containerRegistry: $dockerhub
+              repository: dockerhub
+              command: 'push'
+              tags: |
+                $(imageTag)
