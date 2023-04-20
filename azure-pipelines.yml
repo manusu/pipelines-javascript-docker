@@ -20,6 +20,11 @@ stages:
         pool:
           vmImage: 'ubuntu-latest'
         steps:
+          - task: Docker@2
+            displayName: docker login
+            inputs:
+              containerRegistry: 'dockerhub'
+              command: 'login'
           # 构建 Docker 镜像
           - task: Docker@2
             displayName: Build Docker image
