@@ -20,11 +20,11 @@ stages:
         pool:
           name: 'myvm'
         steps:
-          - task: Docker@2
-            displayName: docker login
+          - task: CmdLine@2
             inputs:
-              containerRegistry: 'dockerhub'
-              command: 'login'
+              script: |
+                echo ‘docker push’
+                docker push swr.ap-southeast-3.myhuaweicloud.com/clay/busybox:latest
           # 构建 Docker 镜像
           - task: Docker@2
             displayName: Build Docker image
