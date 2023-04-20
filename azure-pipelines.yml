@@ -25,7 +25,7 @@ stages:
             displayName: Build Docker image
             inputs:
               containerRegistry: 'dockerhub'
-              command: 'build'
+              command: 'buildAndPush'
               Dockerfile: '$(Build.SourcesDirectory)/app/Dockerfile'
               tags: |
                 $(imageTag)
