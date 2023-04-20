@@ -24,24 +24,9 @@ stages:
           - task: Docker@2
             displayName: Build Docker image
             inputs:
-              containerRegistry: v
-              repository: 'dockerhub'
+              containerRegistry: 'dockerhub'
               command: 'build'
               Dockerfile: '$(Build.SourcesDirectory)/app/Dockerfile'
               tags: |
                 $(imageTag)
-          # 登录到 Docker Hub
-          - task: Docker@2
-            displayName: Login to Docker Hub
-            inputs:
-              containerRegistry: 'dockerhub'
-              command: 'login'
-          # 推送 Docker 镜像到 Docker Hub
-          - task: Docker@2
-            displayName: Push Docker image to Docker Hub
-            inputs:
-              containerRegistry: 'dockerhub'
-              repository: dockerhub
-              command: 'push'
-              tags: |
-                $(imageTag)
+
