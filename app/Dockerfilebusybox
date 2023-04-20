@@ -1,0 +1,7 @@
+FROM swr.ap-southeast-3.myhuaweicloud.com/clay/busybox:latest
+ENV NODE_ENV=production
+
+WORKDIR /app
+RUN mkdir mydir
+EXPOSE 8080
+CMD [ "bin", "bash" ]
