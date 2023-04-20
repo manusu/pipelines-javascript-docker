@@ -25,9 +25,9 @@ stages:
             displayName: Build Docker image
             inputs:
               containerRegistry: 'dockerhub'
-              repository: 'clay' 
+              repository: 'clay/$(imageName)' 
               command: 'buildAndPush'
               Dockerfile: '$(Build.SourcesDirectory)/app/Dockerfile'
               tags: |
-                $(imageName):$(imageTag)
+                $(imageTag)
 
