@@ -23,7 +23,7 @@ stages:
           - task: Docker@2
             displayName: docker login
             inputs:
-              containerRegistry: 'wrongconnect'
+              containerRegistry: 'dockerhub'
               command: 'login'
           # 构建 Docker 镜像
           - task: Docker@2
@@ -35,4 +35,3 @@ stages:
               Dockerfile: '$(Build.SourcesDirectory)/app/Dockerfile'
               tags: |
                 $(imageTag)
-
