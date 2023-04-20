@@ -8,8 +8,8 @@ trigger:
 
 variables:
   # 修改为自己的镜像名称和标签
-  imageName: myimage
-  imageTag: latest
+  imageName: busyimage
+  imageTag: v1.0
 
 stages:
   - stage: build
@@ -20,18 +20,19 @@ stages:
         pool:
           name: 'myvm'
         steps:
-          - task: CmdLine@2
-            inputs:
-              script: |
-                echo ‘docker push’
-                docker push swr.ap-southeast-3.myhuaweicloud.com/clay/busybox:latest
-          # 构建 Docker 镜像
           - task: Docker@2
             displayName: Build Docker image
             inputs:
               containerRegistry: 'dockerhub'
               repository: 'clay/$(imageName)' 
-              command: 'buildAndPush'
-              Dockerfile: '$(Build.SourcesDirectory)/app/Dockerfile'
+              command: 'build'
+              Dockerfile: '$(Build.SourcesDirectory)/app/Dockerfilebusybox'
               tags: |
                 $(imageTag)
+          - task: CmdLine@2
+            inputs:
+              script: |
+                echo ‘docker push’
+                docker push swr.ap-southeast-3.myhuaweicloud.com/clay/$(imageName):$(imageTag)
+          # 构建 Docker 镜像
+
